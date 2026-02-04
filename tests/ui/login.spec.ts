@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { LoginPage } from "../../pages/LoginPage";
 import { ProductsPage } from "../../pages/ProductsPage";
+import { testUsers } from "../../helpers/test-data";
 
 test.describe("Login Tests", () => {
   test("Valid login with standard user", async ({ page }) => {
@@ -8,17 +9,17 @@ test.describe("Login Tests", () => {
     const products = new ProductsPage(page);
 
     await login.navigate("/");
-    await login.login("standard_user", "secret_sauce");
+    await login.login(testUsers.valid.username, testUsers.valid.password);
 
-    await expect(await products.isProductsPageVisible()).toBeTruthy();
-    await expect(page).toHaveURL(/.*inventory.html/);
+    await expect(products.productsTitle).toBeVisible();
+    await expect(page).toHaveURL(/.*inventory\.html/);
   });
 
   test("Invalid login - wrong password", async ({ page }) => {
     const login = new LoginPage(page);
 
     await login.navigate("/");
-    await login.login("standard_user", "wrong_password");
+    await login.login(testUsers.valid.username, "wrong_password");
 
     await expect(login.errorMessage).toBeVisible();
     await expect(login.errorMessage).toContainText("Username and password do not match");
@@ -28,7 +29,7 @@ test.describe("Login Tests", () => {
     const login = new LoginPage(page);
 
     await login.navigate("/");
-    await login.login("invalid_user", "secret_sauce");
+    await login.login("invalid_user", testUsers.valid.password);
 
     await expect(login.errorMessage).toBeVisible();
     await expect(login.errorMessage).toContainText("Username and password do not match");
@@ -48,7 +49,7 @@ test.describe("Login Tests", () => {
     const login = new LoginPage(page);
 
     await login.navigate("/");
-    await login.login("locked_out_user", "secret_sauce");
+    await login.login(testUsers.locked.username, testUsers.locked.password);
 
     await expect(login.errorMessage).toBeVisible();
     await expect(login.errorMessage).toContainText("Sorry, this user has been locked out");

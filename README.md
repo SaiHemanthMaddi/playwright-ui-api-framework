@@ -1,165 +1,166 @@
 # Playwright UI & API Testing Framework
 
-A comprehensive test automation framework built with **Playwright** and **TypeScript**, featuring both UI and API testing capabilities with Allure reporting integration.
+A comprehensive test automation framework built with Playwright and TypeScript, featuring both UI and API testing with Allure reporting.
 
-## 🚀 Features
+## Features
 
-- ✅ **UI Testing** - Automated browser tests using Page Object Model (POM)
-- ✅ **API Testing** - RESTful API testing with comprehensive coverage
-- ✅ **TypeScript** - Type-safe test development
-- ✅ **Allure Reports** - Beautiful, detailed test reports
-- ✅ **Page Object Model** - Maintainable and scalable test structure
-- ✅ **Cross-browser Support** - Test across Chrome, Firefox, and Safari
-- ✅ **Parallel Execution** - Fast test execution
+- UI testing using Page Object Model (POM)
+- API testing for REST endpoints
+- TypeScript for type-safe tests
+- Allure reports for detailed results
+- Cross-browser support (Chromium, Firefox, WebKit)
+- Parallel execution
 
-## 📋 Prerequisites
+## Prerequisites
 
-- **Node.js** (v16 or higher)
-- **npm** or **yarn**
+- Node.js (v16 or higher)
+- npm or yarn
 
-## 🛠️ Installation
+## Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd playwright-ui-api-framework
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Install Playwright browsers:
+
 ```bash
 npx playwright install
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 playwright-ui-api-framework/
-├── pages/                      # Page Object Models
-│   ├── BasePage.ts            # Base page with common methods
-│   ├── LoginPage.ts           # Login page objects
-│   └── ProductsPage.ts        # Products page objects
-├── tests/                      # Test specifications
-│   ├── ui/                    # UI tests
-│   │   ├── login.spec.ts     # Login test scenarios
-│   │   └── products.spec.ts  # Product page tests
-│   └── api/                   # API tests
-│       ├── auth.api.spec.ts  # Posts API CRUD tests
-│       └── users.api.spec.ts # Users API tests
-├── helpers/                    # Helper functions
-│   ├── apiClient.ts           # API client configuration
-│   └── test-data.ts           # Test data constants
-├── utils/                      # Utility functions
-│   └── logger.ts              # Logging utility
-├── allure-results/            # Allure test results
-├── test-results/              # Playwright test results
-├── playwright.config.ts       # Playwright configuration
-├── tsconfig.json              # TypeScript configuration
-└── package.json               # Project dependencies
+|-- pages/                      # Page Object Models
+|   |-- BasePage.ts             # Base page with common methods
+|   |-- LoginPage.ts            # Login page objects
+|   `-- ProductsPage.ts         # Products page objects
+|-- tests/                      # Test specifications
+|   |-- ui/                     # UI tests
+|   |   |-- login.spec.ts       # Login test scenarios
+|   |   `-- products.spec.ts    # Product page tests
+|   `-- api/                    # API tests
+|       |-- auth.api.spec.ts    # Posts API CRUD tests
+|       `-- users.api.spec.ts   # Users API tests
+|-- helpers/                    # Helper functions
+|   |-- apiClient.ts            # API client configuration
+|   `-- test-data.ts            # Test data constants
+|-- utils/                      # Utility functions
+|   `-- logger.ts               # Logging utility
+|-- allure-results/             # Allure test results
+|-- test-results/               # Playwright test results
+|-- playwright.config.ts        # Playwright configuration
+|-- tsconfig.json               # TypeScript configuration
+`-- package.json                # Project dependencies
 ```
 
-## 🧪 Running Tests
+## Running Tests
 
 ### Run All Tests
+
 ```bash
 npm test
 ```
 
 ### Run UI Tests Only
+
 ```bash
 npm run test:ui
 ```
 
 ### Run API Tests Only
+
 ```bash
 npm run test:api
 ```
 
 ### Run Tests in Headed Mode
+
 ```bash
 npm run test:headed
 ```
 
 ### Run Specific Test File
+
 ```bash
 npx playwright test tests/ui/login.spec.ts
 ```
 
 ### Run Tests in Debug Mode
+
 ```bash
 npx playwright test --debug
 ```
 
-## 📊 Test Reports
+### Typecheck
+
+```bash
+npm run typecheck
+```
+
+## Test Reports
 
 ### Generate Allure Report
+
 ```bash
 npm run allure:generate
 ```
 
 ### Open Allure Report
+
 ```bash
 npm run allure:open
 ```
 
-## 🎯 Test Coverage
+## Scheduled Runs
+
+- Jenkins: Nightly at 9:00 PM Africa/Johannesburg.
+- GitHub Actions: Nightly at 9:00 PM Africa/Johannesburg (19:00 UTC).
+
+## Test Coverage
 
 ### UI Tests (SauceDemo)
-- **Login Tests** (5 scenarios)
-  - Valid login with standard user
-  - Invalid login - wrong password
-  - Invalid login - wrong username
-  - Invalid login - empty credentials
-  - Locked out user
 
-- **Products Tests** (7 scenarios)
-  - Add single product to cart
-  - Add multiple products to cart
-  - Sort products by name (A to Z)
-  - Sort products by name (Z to A)
-  - Sort products by price (low to high)
-  - Sort products by price (high to low)
-  - Verify product price display
+- Login tests (5 scenarios)
+- Products tests (7 scenarios)
 
 ### API Tests (JSONPlaceholder)
-- **Posts API Tests** (8 scenarios)
-  - Create post (POST)
-  - Get single post (GET)
-  - Get all posts (GET)
-  - Update post (PUT)
-  - Partial update (PATCH)
-  - Delete post (DELETE)
-  - Error handling (404)
-  - Filter posts by userId
 
-- **Users API Tests** (5 scenarios)
-  - Get all users
-  - Get single user by ID
-  - Validate user data structure
-  - Create new user
-  - Get user posts
+- Posts API tests (8 scenarios)
+- Users API tests (5 scenarios)
 
-## 🔧 Configuration
+## Configuration
 
-### Playwright Config (`playwright.config.ts`)
-- **Test Directory**: `./tests`
-- **Timeout**: 30 seconds
-- **Base URL**: `https://www.saucedemo.com`
-- **Headless Mode**: Enabled by default
-- **Screenshots**: Captured on failure
-- **Videos**: Recorded on failure
-- **Reporters**: List and Allure
+### Playwright Config (playwright.config.ts)
+
+- Test directory: ./tests
+- Timeout: 30 seconds
+- Base URL: https://www.saucedemo.com
+- Headless mode: enabled by default
+- Screenshots: captured on failure
+- Videos: recorded on failure
+- Trace: retained on failure
+- Reporters: list, Allure, HTML
 
 ### API Base URL
-- JSONPlaceholder: `https://jsonplaceholder.typicode.com`
 
-## 📝 Writing Tests
+- JSONPlaceholder: https://jsonplaceholder.typicode.com
+- Override with API_BASE_URL environment variable
+
+## Writing Tests
 
 ### UI Test Example
+
 ```typescript
 import { test, expect } from "@playwright/test";
 import { LoginPage } from "../../pages/LoginPage";
@@ -173,6 +174,7 @@ test("Valid login", async ({ page }) => {
 ```
 
 ### API Test Example
+
 ```typescript
 import { test, expect } from "@playwright/test";
 import { apiClient } from "../../helpers/apiClient";
@@ -181,10 +183,11 @@ test("Get users", async () => {
   const api = await apiClient();
   const response = await api.get("/users");
   expect(response.status()).toBe(200);
+  await api.dispose();
 });
 ```
 
-## 🎨 Page Object Model
+## Page Object Model
 
 The framework uses the Page Object Model pattern for better maintainability:
 
@@ -202,7 +205,7 @@ export class LoginPage extends BasePage {
 }
 ```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -210,18 +213,18 @@ export class LoginPage extends BasePage {
 4. Push to the branch
 5. Create a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License.
 
-## 🔗 Resources
+## Resources
 
-- [Playwright Documentation](https://playwright.dev/)
-- [TypeScript Documentation](https://www.typescriptlang.org/)
-- [Allure Report](https://docs.qameta.io/allure/)
-- [SauceDemo Test Site](https://www.saucedemo.com/)
-- [JSONPlaceholder API](https://jsonplaceholder.typicode.com/)
+- Playwright Documentation: https://playwright.dev/
+- TypeScript Documentation: https://www.typescriptlang.org/
+- Allure Report: https://docs.qameta.io/allure/
+- SauceDemo Test Site: https://www.saucedemo.com/
+- JSONPlaceholder API: https://jsonplaceholder.typicode.com/
 
-## 👤 Author
+## Author
 
-Created with ❤️ using Playwright and TypeScript
+Created with care using Playwright and TypeScript.

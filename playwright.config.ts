@@ -3,10 +3,14 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',
   timeout: 30 * 1000,
+  fullyParallel: true,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 2 : undefined,
 
   reporter: [
     ['list'],
-    ['allure-playwright']
+    ['allure-playwright'],
+    ['html', { open: 'never' }]
   ],
 
   use: {
@@ -15,6 +19,7 @@ export default defineConfig({
     actionTimeout: 10 * 1000,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
+    trace: 'retain-on-failure',
     baseURL: 'https://www.saucedemo.com'
   },
 

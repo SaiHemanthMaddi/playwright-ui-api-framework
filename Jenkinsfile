@@ -1,6 +1,14 @@
 pipeline {
     agent any
     
+    environment {
+        CI = 'true'
+    }
+
+    triggers {
+        cron('TZ=Africa/Johannesburg\nH 21 * * *')
+    }
+
     parameters {
         choice(
             name: 'TEST_SUITE',
@@ -31,12 +39,29 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing Node.js dependencies...'
-                bat 'npm install'
+                bat 'npm ci'
                 echo 'Installing Playwright browsers...'
                 bat 'npx playwright install'
             }
         }
         
+        stage('Typecheck') {
+            steps {
+                echo 'Running TypeScript typecheck...'
+                bat 'npm run typecheck'
+            }
+        }
+
+        stage('API Smoke') {
+            when {
+                expression { params.TEST_SUITE == 'all' }
+            }
+            steps {
+                echo 'Running API smoke tests...'
+                bat 'npm run test:api'
+            }
+        }
+
         stage('Run Tests') {
             steps {
                 script {
@@ -72,10 +97,10 @@ pipeline {
             archiveArtifacts artifacts: 'test-results/**/*', allowEmptyArchive: true
         }
         success {
-            echo 'Tests passed successfully! ✅'
+            echo 'Tests passed successfully!'
         }
         failure {
-            echo 'Tests failed! ❌'
+            echo 'Tests failed!'
         }
     }
 }

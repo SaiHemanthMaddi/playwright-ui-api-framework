@@ -1,9 +1,18 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, APIRequestContext } from "@playwright/test";
 import { apiClient } from "../../helpers/apiClient";
 
 test.describe("Posts API Tests", () => {
+  let api: APIRequestContext;
+
+  test.beforeEach(async () => {
+    api = await apiClient();
+  });
+
+  test.afterEach(async () => {
+    await api.dispose();
+  });
+
   test("Create Post API", async () => {
-    const api = await apiClient();
 
     const response = await api.post("/posts", {
       data: {
@@ -21,8 +30,6 @@ test.describe("Posts API Tests", () => {
   });
 
   test("Get single post", async () => {
-    const api = await apiClient();
-
     const response = await api.get("/posts/1");
     expect(response.status()).toBe(200);
 
@@ -34,8 +41,6 @@ test.describe("Posts API Tests", () => {
   });
 
   test("Get all posts", async () => {
-    const api = await apiClient();
-
     const response = await api.get("/posts");
     expect(response.status()).toBe(200);
 
@@ -45,8 +50,6 @@ test.describe("Posts API Tests", () => {
   });
 
   test("Update post with PUT", async () => {
-    const api = await apiClient();
-
     const response = await api.put("/posts/1", {
       data: {
         id: 1,
@@ -64,8 +67,6 @@ test.describe("Posts API Tests", () => {
   });
 
   test("Partial update post with PATCH", async () => {
-    const api = await apiClient();
-
     const response = await api.patch("/posts/1", {
       data: {
         title: "Patched Title"
@@ -79,22 +80,16 @@ test.describe("Posts API Tests", () => {
   });
 
   test("Delete post", async () => {
-    const api = await apiClient();
-
     const response = await api.delete("/posts/1");
     expect(response.status()).toBe(200);
   });
 
   test("Get non-existent post - 404 error", async () => {
-    const api = await apiClient();
-
     const response = await api.get("/posts/999999");
     expect(response.status()).toBe(404);
   });
 
   test("Filter posts by userId", async () => {
-    const api = await apiClient();
-
     const response = await api.get("/posts?userId=1");
     expect(response.status()).toBe(200);
 

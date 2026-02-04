@@ -1,10 +1,18 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, APIRequestContext } from "@playwright/test";
 import { apiClient } from "../../helpers/apiClient";
 
 test.describe("Users API Tests", () => {
-  test("GET all users", async () => {
-    const api = await apiClient();
+  let api: APIRequestContext;
 
+  test.beforeEach(async () => {
+    api = await apiClient();
+  });
+
+  test.afterEach(async () => {
+    await api.dispose();
+  });
+
+  test("GET all users", async () => {
     const response = await api.get("/users");
     expect(response.status()).toBe(200);
 
@@ -14,8 +22,6 @@ test.describe("Users API Tests", () => {
   });
 
   test("GET single user by ID", async () => {
-    const api = await apiClient();
-
     const response = await api.get("/users/1");
     expect(response.status()).toBe(200);
 
@@ -27,8 +33,6 @@ test.describe("Users API Tests", () => {
   });
 
   test("Validate user data structure", async () => {
-    const api = await apiClient();
-
     const response = await api.get("/users/1");
     const user = await response.json();
 
@@ -44,8 +48,6 @@ test.describe("Users API Tests", () => {
   });
 
   test("Create new user", async () => {
-    const api = await apiClient();
-
     const newUser = {
       name: "John Doe",
       username: "johndoe",
@@ -64,8 +66,6 @@ test.describe("Users API Tests", () => {
   });
 
   test("Get user posts", async () => {
-    const api = await apiClient();
-
     const response = await api.get("/users/1/posts");
     expect(response.status()).toBe(200);
 

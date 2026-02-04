@@ -28,7 +28,8 @@ export class ProductsPage extends BasePage {
 
   async getCartItemCount(): Promise<string> {
     if (await this.shoppingCartBadge.isVisible()) {
-      return await this.shoppingCartBadge.textContent() || "0";
+      const count = await this.shoppingCartBadge.innerText();
+      return count.trim();
     }
     return "0";
   }
@@ -38,12 +39,17 @@ export class ProductsPage extends BasePage {
   }
 
   async getFirstProductName(): Promise<string> {
-    return await this.inventoryItems.first().locator('.inventory_item_name').textContent() || "";
+    const name = await this.inventoryItems
+      .first()
+      .locator('.inventory_item_name')
+      .innerText();
+    return name.trim();
   }
 
   async getProductPrice(productName: string): Promise<string> {
     const product = this.page.locator('.inventory_item', { hasText: productName });
-    return await product.locator('.inventory_item_price').textContent() || "";
+    const price = await product.locator('.inventory_item_price').innerText();
+    return price.trim();
   }
 
   async goToCart() {
