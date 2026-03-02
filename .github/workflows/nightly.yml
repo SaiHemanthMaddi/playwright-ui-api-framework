@@ -4,6 +4,27 @@ on:
   schedule:
     - cron: "0 19 * * *"
   workflow_dispatch:
+    inputs:
+      browser:
+        description: "Browser to run on (manual runs)"
+        required: true
+        default: "chromium"
+        type: choice
+        options:
+          - chromium
+          - firefox
+          - webkit
+      spec:
+        description: "Spec to run (manual runs)"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - tests/ui/login.spec.ts
+          - tests/ui/products.spec.ts
+          - tests/api/auth.api.spec.ts
+          - tests/api/users.api.spec.ts
 
 jobs:
   test:
@@ -28,7 +49,25 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Build Test Command
+        id: cmd
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          TEST_CMD="npx playwright test"
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            BROWSER="${{ github.event.inputs.browser }}"
+            SPEC="${{ github.event.inputs.spec }}"
+            TEST_CMD="$TEST_CMD --project=$BROWSER"
+            if [[ "$SPEC" != "all" ]]; then
+              TEST_CMD="$TEST_CMD $SPEC"
+            fi
+          fi
+
+          echo "test_cmd=$TEST_CMD" >> "$GITHUB_OUTPUT"
+
       - name: Run Tests
         env:
           CI: "true"
-        run: npm test
+        run: ${{ steps.cmd.outputs.test_cmd }}
