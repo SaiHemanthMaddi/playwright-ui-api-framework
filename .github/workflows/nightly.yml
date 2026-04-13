@@ -62,7 +62,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          TEST_CMD="npx playwright test --config=./playwright.service.config.ts --workers=3"
+          TEST_CMD="npx playwright test --config=${{ github.workspace }}/playwright.service.config.ts --workers=3"
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             BROWSER="${{ github.event.inputs.browser }}"
             SPEC="${{ github.event.inputs.spec }}"
