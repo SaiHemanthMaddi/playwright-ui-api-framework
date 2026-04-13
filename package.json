@@ -6,12 +6,16 @@
     "test:headed": "npx playwright test --headed",
     "test:ui": "npx playwright test tests/ui",
     "test:api": "npx playwright test tests/api",
+    "mcp:playwright": "npx @playwright/mcp --browser chrome --port 8931",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "allure:generate": "allure generate ./allure-results --clean",
     "allure:open": "allure open ./allure-report",
     "allure:clean": "rimraf allure-results allure-report"
   },
   "devDependencies": {
+    "@azure/identity": "^4.13.1",
+    "@azure/playwright": "^1.1.4",
+    "@playwright/mcp": "^0.0.68",
     "@playwright/test": "^1.58.1",
     "allure-playwright": "^3.4.5",
     "rimraf": "^6.1.2",
