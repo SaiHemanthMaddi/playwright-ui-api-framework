@@ -2,7 +2,9 @@ name: Nightly Tests
 
 on:
   schedule:
-    - cron: "0 19 * * *"
+    # GitHub Actions cron uses UTC and may skip/delay jobs at minute 0 during high load.
+    # Run at 19:17 UTC daily (21:17 Africa/Johannesburg).
+    - cron: "17 19 * * *"
   workflow_dispatch:
     inputs:
       browser:
