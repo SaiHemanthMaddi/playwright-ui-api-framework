@@ -60,22 +60,21 @@ jobs:
         id: cmd
         shell: bash
         run: |
-            set -euo pipefail
-            TEST_CMD="npx playwright test --config=$GITHUB_WORKSPACE/playwright.service.config.ts --workers=3"
-            if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+          set -euo pipefail
+
+          TEST_CMD="npx playwright test --config=playwright.service.config.ts --workers=3"
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             BROWSER="${{ github.event.inputs.browser }}"
             SPEC="${{ github.event.inputs.spec }}"
             TEST_CMD="$TEST_CMD --project=$BROWSER"
             if [[ "$SPEC" != "all" ]]; then
-            TEST_CMD="$TEST_CMD $SPEC"
+              TEST_CMD="$TEST_CMD $SPEC"
             fi
-            else
-              TEST_CMD="$TEST_CMD --project=chromium"
-            fi
-            echo "test_cmd=$TEST_CMD" >> "$GITHUB_OUTPUT"
+          fi
+
+          echo "test_cmd=$TEST_CMD" >> "$GITHUB_OUTPUT"
 
       - name: Run Tests
         env:
           CI: "true"
-          working-directory: ${{ github.workspace }}
         run: ${{ steps.cmd.outputs.test_cmd }}
