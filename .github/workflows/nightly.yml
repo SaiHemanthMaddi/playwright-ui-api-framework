@@ -62,17 +62,23 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
-          TEST_CMD="npx playwright test --config=playwright.service.config.ts --workers=3"
+          TEST_CMD="npx playwright test --config=$GITHUB_WORKSPACE/playwright.service.config.ts --workers=3"
+    
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             BROWSER="${{ github.event.inputs.browser }}"
             SPEC="${{ github.event.inputs.spec }}"
+      
+            # Only add --project if not "all"
+            if [[ "$BROWSER" != "all" ]]; then
             TEST_CMD="$TEST_CMD --project=$BROWSER"
+            fi
+
+            # "all" means run all browsers, so don't add --project flag at all
             if [[ "$SPEC" != "all" ]]; then
-              TEST_CMD="$TEST_CMD $SPEC"
+            TEST_CMD="$TEST_CMD $SPEC"
             fi
           fi
-
+    
           echo "test_cmd=$TEST_CMD" >> "$GITHUB_OUTPUT"
 
       - name: Run Tests
