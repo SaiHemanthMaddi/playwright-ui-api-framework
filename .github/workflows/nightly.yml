@@ -2,8 +2,7 @@ name: Nightly Tests
 
 on:
   schedule:
-    # GitHub Actions cron uses UTC and may skip/delay jobs at minute 0 during high load.
-    # Run at 19:17 UTC daily (21:17 Africa/Johannesburg).
+    # Run at 19:17 UTC daily.
     - cron: "17 19 * * *"
   workflow_dispatch:
     inputs:
@@ -33,8 +32,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    env:
-      PLAYWRIGHT_SERVICE_URL: ${{ vars.PLAYWRIGHT_SERVICE_URL }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -51,10 +48,7 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Azure Login
-        uses: azure/login@v3
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      # REMOVED: Azure Login step (no longer needed for local runs)
 
       - name: Typecheck
         run: npm run typecheck
@@ -64,20 +58,20 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          TEST_CMD="npx playwright test --config=$GITHUB_WORKSPACE/playwright.service.config.ts --workers=3"
+          
+          # Use the standard config instead of the service config
+          TEST_CMD="npx playwright test"
     
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             BROWSER="${{ github.event.inputs.browser }}"
             SPEC="${{ github.event.inputs.spec }}"
       
-            # Only add --project if not "all"
             if [[ "$BROWSER" != "all" ]]; then
-            TEST_CMD="$TEST_CMD --project=$BROWSER"
+              TEST_CMD="$TEST_CMD --project=$BROWSER"
             fi
 
-            # "all" means run all browsers, so don't add --project flag at all
             if [[ "$SPEC" != "all" ]]; then
-            TEST_CMD="$TEST_CMD $SPEC"
+              TEST_CMD="$TEST_CMD $SPEC"
             fi
           fi
     
@@ -87,3 +81,11 @@ jobs:
         env:
           CI: "true"
         run: ${{ steps.cmd.outputs.test_cmd }}
+
+      # Added artifact upload so you can actually see your results!
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
