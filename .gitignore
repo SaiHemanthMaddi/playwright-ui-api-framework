@@ -1,6 +1,9 @@
 # Node modules
 node_modules/
 
+# Playwright auth state
+playwright/.auth/
+
 # Test results
 test-results/
 playwright-report/

@@ -1,13 +1,12 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../../pages/LoginPage";
 import { ProductsPage } from "../../pages/ProductsPage";
-import { sortOptions, testProducts, testUsers } from "../../helpers/test-data";
+import { sortOptions, testProducts } from "../../helpers/test-data";
+
+test.use({ storageState: 'playwright/.auth/user.json' });
 
 test.describe("Products Page Tests", () => {
     test.beforeEach(async ({ page }) => {
-        const login = new LoginPage(page);
-        await login.navigate("/");
-        await login.login(testUsers.valid.username, testUsers.valid.password);
+        await page.goto('/inventory.html');
     });
 
     test("Add single product to cart", async ({ page }) => {
