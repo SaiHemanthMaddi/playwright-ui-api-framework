@@ -2,8 +2,6 @@ import { test, expect } from "@playwright/test";
 import { ProductsPage } from "../../pages/ProductsPage";
 import { sortOptions, testProducts } from "../../helpers/test-data";
 
-test.use({ storageState: 'playwright/.auth/user.json' });
-
 test.describe("Products Page Tests", () => {
     test.beforeEach(async ({ page }) => {
         await page.goto('/inventory.html');

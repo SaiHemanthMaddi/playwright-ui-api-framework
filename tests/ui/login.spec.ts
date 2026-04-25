@@ -3,6 +3,8 @@ import { LoginPage } from "../../pages/LoginPage";
 import { ProductsPage } from "../../pages/ProductsPage";
 import { testUsers } from "../../helpers/test-data";
 
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe("Login Tests", () => {
   test("Valid login with standard user", async ({ page }) => {
     const login = new LoginPage(page);
