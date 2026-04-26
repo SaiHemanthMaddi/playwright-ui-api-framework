@@ -108,6 +108,48 @@ npx playwright test --debug
 npm run typecheck
 ```
 
+## SonarQube (Local)
+
+This project is configured with `sonar-project.properties` and npm scripts for local SonarQube analysis.
+
+### Start SonarQube Server
+
+```bash
+npm run sonar:start
+```
+
+SonarQube will be available at `http://localhost:9000`.
+
+### Optional: Install and Run SonarQube as a Windows Service
+
+```bash
+npm run sonar:service:install
+npm run sonar:service:start
+```
+
+To stop the service:
+
+```bash
+npm run sonar:service:stop
+```
+
+### Run Code Analysis
+
+1. Generate a SonarQube token in your SonarQube account.
+2. Set token in terminal:
+
+```powershell
+$env:SONAR_TOKEN="your_token_here"
+```
+
+3. Run scan:
+
+```bash
+npm run sonar:scan
+```
+
+Note: `sonar-scanner` CLI must be installed and available in your PATH.
+
 ## Test Reports
 
 ### Generate Allure Report
